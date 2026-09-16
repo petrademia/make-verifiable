@@ -1,0 +1,4 @@
+interface:
+  display_name: "Make Reproducible"
+  short_description: "Turn unstable behavior into repeatable evidence"
+  default_prompt: "Use $make-reproducible to diagnose this inconsistent behavior and make it reproducible with the smallest justified change."
