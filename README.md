@@ -40,8 +40,8 @@ Each criterion has a completion role and an assurance level:
 
 The outcome policy has explicit precedence:
 
-1. Valid counterevidence means **Falsified**.
-2. A known required check that cannot run means **Blocked**.
+1. With a settled contract, valid counterevidence means **Falsified**.
+2. An unresolved authoritative contract conflict, or a known required check that cannot run, means **Blocked**.
 3. Missing or inadequate evidence means **Unverified**.
 4. All required gates passing means **Verified**.
 
@@ -87,7 +87,7 @@ Passing an unrelated suite, repeating the same oracle, or asking several agents 
 
 ## Behavioral evaluations
 
-The [`evals/`](evals/) directory contains blind scenario inputs, small fixtures, expected decisions, a decision-based rubric, and recorded independent runs. The initial set covers a trivial edit, misleading passing tests, conflicting requirements, unavailable runtime access, and an unsafe destructive challenge.
+The [`evals/`](evals/) directory contains blind scenario inputs, small fixtures, expected decisions, a decision-based rubric, and recorded independent runs. The initial set covers a trivial edit, misleading passing tests, conflicting requirements, unavailable runtime access, and an unsafe destructive challenge. The [first recorded evaluation](evals/runs/2026-09-16-summary.md) produced the expected decision in all 15 scenario runs across three independent contexts.
 
 Evaluators receive the skill, one scenario, and its fixture. They do not receive expected decisions or earlier run results until scoring. The evaluation checks decisions and evidence handling rather than matching generated wording.
 

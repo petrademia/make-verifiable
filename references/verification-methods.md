@@ -66,14 +66,14 @@ Evaluate conditions from top to bottom and stop at the first match:
 
 | Priority | Condition | Criterion status |
 |---|---|---|
-| 1 | Any gate produced valid counterevidence | Falsified |
-| 2 | A required gate has a known check that cannot run because of a concrete dependency, authority, environment, or safety constraint | Blocked |
+| 1 | With a settled contract, any gate produced valid counterevidence against the claim | Falsified |
+| 2 | Authoritative requirements conflict without a precedence decision, or a required gate has a known check that cannot run because of a concrete dependency, authority, environment, or safety constraint | Blocked |
 | 3 | A required gate lacks an adequate method or sufficient evidence | Unverified |
 | 4 | Every required gate passed and no contradiction remains | Verified |
 
 Label a verified criterion **Triangulated** when all three gates passed with meaningfully independent evidence. Passing one or two gates may be reported as supporting evidence, but it does not create another completion status.
 
-A failed command is not automatically counterevidence. Distinguish an environmental or tooling failure, which may block verification, from an observation that falsifies the claim. When a check has not been designed or its evidence is inadequate, use Unverified rather than Blocked.
+A conflicting requirement is not counterevidence against either candidate contract until an authorized source resolves which contract applies. Likewise, a failed command is not automatically counterevidence. Distinguish an unresolved contract or environmental/tooling failure, which may block verification, from an observation that falsifies a settled claim. When a check has not been designed or its evidence is inadequate, use Unverified rather than Blocked.
 
 ## Methods by task
 

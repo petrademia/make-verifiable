@@ -40,7 +40,7 @@ Each gate targets a different mistake:
 
 The Contract gate applies to every material claim. A standard-assurance claim also needs the most direct applicable observation, normally Execution. An elevated-assurance claim requires all three gates. The methods must be meaningfully independent. Repeating the same oracle, mock, assumption, or model opinion does not add verification strength.
 
-A valid contradiction cannot be outvoted by passing checks. Resolve it or report the claim as falsified or unverified.
+A valid contradiction cannot be outvoted by passing checks. Once the contract is settled, counterevidence against the claim makes it falsified. Conflicting authoritative requirements with no precedence rule instead block the Contract gate because the intended claim is not yet known.
 
 ## Workflow
 
@@ -93,8 +93,8 @@ Never report a check as passed when it was not run. If a check is unstable, read
 
 Evaluate every material criterion using this precedence order:
 
-1. **Falsified:** valid counterevidence from any gate contradicts the claim. Passing checks cannot outvote it.
-2. **Blocked:** no counterevidence exists, but at least one required gate has a known check that a concrete dependency, missing authority, unavailable environment, or safety constraint prevents from running.
+1. **Falsified:** with a settled contract, valid counterevidence from any gate contradicts the claim. Passing checks cannot outvote it.
+2. **Blocked:** the intended contract is unresolved because authoritative sources conflict, or at least one required gate has a known check that a concrete dependency, missing authority, unavailable environment, or safety constraint prevents from running.
 3. **Unverified:** no counterevidence or blocker exists, but at least one required gate lacks an adequate method or sufficient evidence.
 4. **Verified:** every required gate passed and no unresolved evidence contradicts the claim.
 
