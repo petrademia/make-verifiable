@@ -87,7 +87,7 @@ Passing an unrelated suite, repeating the same oracle, or asking several agents 
 
 ## Behavioral evaluations
 
-The [`evals/`](evals/) directory contains blind scenario inputs, small fixtures, expected decisions, a decision-based rubric, and recorded independent runs. The initial set covers a trivial edit, misleading passing tests, conflicting requirements, unavailable runtime access, and an unsafe destructive challenge. The [first recorded evaluation](evals/runs/2026-09-16-summary.md) produced the expected decision in all 15 scenario runs across three independent contexts.
+The [`evals/`](evals/) directory contains blind scenario inputs, small fixtures, expected decisions, a decision-based rubric, and recorded independent runs. The suite covers low-risk direct checks, misleading or duplicated evidence, conflicting requirements, unavailable runtime access, unsafe challenges, unreproduced incidents, and unstable performance checks. The [first recorded evaluation](evals/runs/2026-09-16-summary.md) produced the expected decision in all 15 runs of the original five scenarios across three independent contexts.
 
 Evaluators receive the skill, one scenario, and its fixture. They do not receive expected decisions or earlier run results until scoring. The evaluation checks decisions and evidence handling rather than matching generated wording.
 
