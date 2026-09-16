@@ -20,7 +20,7 @@ Respect the requested mode:
 - For implementation, define the verification contract, make the scoped change, and collect evidence.
 - For assessment or review, evaluate the existing artifact without editing unless the user asks for changes.
 
-Reuse existing tests, development commands, application drivers, and observability. Add the smallest missing check needed to verify a material claim.
+Reuse existing tests, development commands, application drivers, and observability. During implementation, add the smallest missing check needed to verify a material claim. During assessment or review, run existing non-mutating checks and report missing checks rather than adding them.
 
 ## Verification triangle
 
@@ -45,6 +45,8 @@ Ask for clarification only when a missing product decision would materially chan
 ### 2. Define material criteria and claims
 
 Convert the request into a bounded set of observable acceptance criteria. For each criterion, state the material claim the final response would need to make.
+
+Before implementation or verification, label which criteria are critical and which gates are required for each one, with a short rationale. Criteria that determine whether the requested outcome was achieved are critical by default. Do not downgrade a criterion because it is difficult to verify.
 
 Exclude incidental implementation details unless the request makes them part of the contract. Do not expand into a whole-system quality plan.
 
@@ -79,7 +81,7 @@ Assign every material criterion exactly one status:
 - **Blocked:** the check is known, but access, environment, authority, or another concrete dependency prevents execution.
 - **Unverified:** the available method or evidence is insufficient.
 
-Do not turn these statuses into an AI confidence percentage. Report observable counts, such as verified criteria over total material criteria, independent methods used, contradictions, and critical criteria still blocked or unverified.
+Do not turn these statuses into an AI confidence percentage. Report observable counts, such as verified criteria over total material criteria, criteria that completed all three gates with independent evidence, contradictions, and critical criteria still blocked or unverified. Attribute methods per claim rather than presenting an unexplained global method count.
 
 ### 8. Report the verification record
 
@@ -101,5 +103,6 @@ Claim full completion only when every critical acceptance criterion is verified.
 - Do not hide failed or contradictory evidence behind a majority of passing checks.
 - Do not invent certainty scores or describe work as foolproof.
 - Do not require three checks for trivial claims when one direct check is sufficient.
+- Do not describe a narrow validator as proof of parts it does not inspect.
 - Do not broaden the task merely to improve a verification metric.
 - Do not post evidence or change external ticket state unless the user requested that action.

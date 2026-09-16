@@ -53,10 +53,10 @@ Falsified:               0
 Blocked:                 1
 Unverified:              0
 Critical unverified:     1
-Independent methods:     3
+Triangulated criteria:   3
 ```
 
-Passing an unrelated suite, repeating the same oracle, or asking several agents for opinions does not strengthen a claim.
+Passing an unrelated suite, repeating the same oracle, or asking several agents for opinions does not strengthen a claim. The verification record attributes each method to a specific claim, so aggregate counts cannot hide duplicated evidence.
 
 ## Example
 
