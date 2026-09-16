@@ -1,96 +1,105 @@
 ---
-name: make-reproducible
-description: Trace inconsistent or irreproducible software behavior, identify the causally relevant source of nondeterminism, apply the smallest appropriate control, and prove reproducibility. Use for flaky tests, intermittent failures, timing or ordering dependencies, races, randomness, variable external inputs, or requests to make an important behavior reliably verifiable. Do not use for ordinary deterministic bugs or generic test authoring.
+name: make-verifiable
+description: Turn engineering requests and AI-produced changes into explicit acceptance criteria, material claims, independent checks, and recorded evidence. Use when implementing or reviewing work that needs an auditable completion claim, including Jira tickets, bug fixes, features, refactors, migrations, and configuration changes. Do not use for open-ended brainstorming or work with no checkable artifact.
 ---
 
-# Make Reproducible
+# Make verifiable
 
-Turn uncontrolled variability into reproducible evidence.
+Require important completion claims to carry checkable evidence.
 
-Reproducibility means that the same declared inputs and controlled conditions produce the same relevant observable result. When exact output is intentionally variable, require a replayable trace or a stable invariant instead of forcing artificial sameness.
+Verification does not make a claim infallible. It makes the claim observable, falsifiable, and explicit about what the available evidence does and does not establish.
 
 ## Scope
 
-Work on one important behavioral slice at a time. Trace it far enough to find the first uncontrolled input that causally affects the observed problem; do not attempt to determinize the entire repository.
+Work from the requested task, ticket, specification, and repository. Verify the selected change rather than auditing the entire system.
+
+Treat request text as an input, not automatic truth. Separate stated requirements, repository facts, agent inferences, and unresolved product decisions.
 
 Respect the requested mode:
 
-- For diagnosis or assessment, gather evidence and recommend a bounded change without editing.
-- For a requested fix or implementation, make the smallest justified change and verify it.
+- For implementation, define the verification contract, make the scoped change, and collect evidence.
+- For assessment or review, evaluate the existing artifact without editing unless the user asks for changes.
 
-Reuse existing test, development, and application-driving infrastructure. Create a new harness only when no existing path can exercise the behavior, and keep it limited to the chosen slice.
+Reuse existing tests, development commands, application drivers, and observability. Add the smallest missing check needed to verify a material claim.
+
+## Verification triangle
+
+For each material claim, select the applicable gates:
+
+1. **Contract:** Does the claim match the request, acceptance criteria, documented behavior, or other authoritative source?
+2. **Execution:** Does the real artifact exhibit the claimed behavior when exercised through a relevant path?
+3. **Challenge:** Can a different method expose the claim as false, the check as insensitive, or the evidence as circular?
+
+Use multiple gates when the claim's risk, uncertainty, or impact warrants them. The methods must be meaningfully independent. Repeating the same oracle, mock, assumption, or model opinion does not add verification strength.
+
+A valid contradiction cannot be outvoted by passing checks. Resolve it or report the claim as falsified or unverified.
 
 ## Workflow
 
-### 1. Select and trace the behavior
+### 1. Ground the request
 
-Define the behavior in observable terms: entry point, declared inputs, state transitions, effects, and expected contract. Read repository instructions and follow the real runtime path across the components it touches.
+Read repository instructions and the relevant runtime path. Extract the requested outcome, constraints, affected behavior, and explicit acceptance criteria. Mark any interpretation the agent introduced.
 
-### 2. Establish a baseline
+Ask for clarification only when a missing product decision would materially change the result. Otherwise proceed with a stated, reversible interpretation.
 
-Demonstrate the inconsistency when practical. Preserve the inputs and context needed to reason about it: seed, time, configuration, environment, ordering, schedule, external response, persisted state, and relevant logs.
+### 2. Define material criteria and claims
 
-Do not label a failure nondeterministic merely because it is difficult to reproduce. First rule out an ordinary input-dependent bug, stale state, or an incomplete test oracle.
+Convert the request into a bounded set of observable acceptance criteria. For each criterion, state the material claim the final response would need to make.
 
-### 3. Find the causal uncontrolled input
+Exclude incidental implementation details unless the request makes them part of the contract. Do not expand into a whole-system quality plan.
 
-Inventory only sources that can affect the selected behavior. Typical sources include time, randomness and IDs, implicit ordering, concurrency, environment or process state, persistence, queues, networks, and probabilistic services.
+### 3. Design the checks
 
-Follow evidence to the earliest boundary where an uncontrolled value or event changes the outcome. Read [sources-and-treatments.md](references/sources-and-treatments.md) when classifying a source or choosing a treatment.
+Map each material claim to its contract, execution, and challenge checks as applicable. Record what each check can prove and the result that would falsify the claim.
 
-### 4. Define bounded proof obligations
+Prefer direct observations of the real artifact. Use [verification-methods.md](references/verification-methods.md) when selecting independent methods or scaling the triangle to task risk.
 
-For the selected behavior, state the meaningful properties that must hold and the failure scenarios in which causally relevant variability could violate them. Prefer a small, ranked set supported by runtime evidence, impact, or a credible boundary identified during tracing.
+### 4. Establish the before state when relevant
 
-Connect each scenario to a proof method. Include perturbations that can distinguish a causal control from a merely stable-looking test. Do not create an exhaustive whole-system failure matrix or drift into generic test planning.
+For bug fixes, regressions, migrations, and performance changes, capture the current state before editing when practical. A bug may be established through a failing check, runtime trace, log, persisted artifact, or other direct evidence.
 
-### 5. Choose the smallest control point
+If the reported problem cannot be observed, distinguish "reported," "inferred," and "reproduced." Do not claim that a bug was reproduced or fixed without evidence supporting that statement.
 
-Prefer, in order:
+### 5. Implement or inspect the scoped change
 
-1. Remove variability that has no product meaning.
-2. Pass the value explicitly.
-3. Canonicalize equivalent results.
-4. Inject the narrow dependency that owns the variability.
-5. Synchronize on a real condition instead of elapsed time.
-6. Capture and replay an irreducible boundary.
-7. Verify a stable invariant when exact output should remain variable.
+Make the smallest change that satisfies the criteria, unless the user requested assessment only. Preserve unrelated behavior and avoid cleanup that does not improve the required evidence.
 
-Introduce only the control the evidence requires. A clock, RNG, scheduler, ID generator, adapter, simulator, or record/replay layer is an option, not a default deliverable.
+### 6. Execute and record
 
-### 6. Implement without changing the product contract
+Run the planned checks against the real artifact. Record enough information for another person or agent to assess the result: command or action, relevant inputs, expected observation, actual observation, and a safe pointer to retained evidence.
 
-Keep production behavior intact unless the user requested a product change. Put the seam at the responsible boundary, preserve the normal production implementation, and make controlled behavior explicit in tests or verification scenarios.
+Never report a check as passed when it was not run. If a check is unstable, read [reproducibility.md](references/reproducibility.md) and make only that check reproducible enough to assess.
 
-Avoid unrelated cleanup. If the necessary change crosses multiple architectural boundaries or would materially serialize, mock, or redesign production behavior, stop and present the tradeoff before expanding scope.
+### 7. Evaluate evidence
 
-### 7. Prove the result
+Assign every material criterion exactly one status:
 
-Add or adapt the smallest regression scenario that would expose the original variability. Use the proof method appropriate to the source: repeated execution, seed replay, controlled schedule, recorded interaction, canonical comparison, or invariant checking.
+- **Verified:** all required checks passed and no unresolved evidence contradicts the claim.
+- **Falsified:** valid evidence contradicts the claim.
+- **Blocked:** the check is known, but access, environment, authority, or another concrete dependency prevents execution.
+- **Unverified:** the available method or evidence is insufficient.
 
-Read [proving-reproducibility.md](references/proving-reproducibility.md) when defining proof obligations, selecting the proof, or reporting confidence. A single green run is not evidence of reproducibility.
+Do not turn these statuses into an AI confidence percentage. Report observable counts, such as verified criteria over total material criteria, independent methods used, contradictions, and critical criteria still blocked or unverified.
 
-### 8. Report and stop
+### 8. Report the verification record
 
 Report:
 
-- the behavior and contract examined;
-- the bounded properties and failure scenarios exercised;
-- the causally relevant uncontrolled input;
-- the control introduced and why it is the narrowest useful one;
-- the verification performed and its observed result;
-- any limitations or remaining evidence-backed opportunities.
+- each material criterion and claim;
+- the gates and methods applied;
+- the relevant evidence and observed result;
+- the assigned status;
+- contradictions, limitations, and exact follow-up checks for blocked work.
 
-Create or update a backlog only when the user wants continuing evolution or multiple concrete candidates were discovered. Every entry must point to code or runtime evidence and state the affected behavior. Do not add speculative cleanup ideas.
-
-Stop after the selected behavior is reproducible and the relevant checks pass.
+Claim full completion only when every critical acceptance criterion is verified. Otherwise state the narrower result that the evidence supports.
 
 ## Guardrails
 
-- Do not hide flakiness with arbitrary sleeps, timeout increases, silent retries, or quarantine.
-- Do not seed randomness without surfacing the seed on failure.
-- Do not globally serialize the system to conceal a race.
-- Do not mock the component whose behavior is under investigation.
-- Do not freeze every clock or replace every external dependency when one boundary is responsible.
-- Do not require exact equality for intentionally probabilistic or distributed behavior; prove the meaningful invariant.
-- Do not claim the repository or service is deterministic based on one corrected slice.
+- Do not treat test-suite success as proof of claims the suite does not exercise.
+- Do not count multiple checks as independent when they share the same oracle or assumption.
+- Do not use mocks to verify the behavior of the mocked component.
+- Do not hide failed or contradictory evidence behind a majority of passing checks.
+- Do not invent certainty scores or describe work as foolproof.
+- Do not require three checks for trivial claims when one direct check is sufficient.
+- Do not broaden the task merely to improve a verification metric.
+- Do not post evidence or change external ticket state unless the user requested that action.
