@@ -30,6 +30,14 @@ For each material claim, select the applicable gates:
 2. **Execution:** Does the real artifact exhibit the claimed behavior when exercised through a relevant path?
 3. **Challenge:** Can a different method expose the claim as false, the check as insensitive, or the evidence as circular?
 
+Each gate targets a different mistake:
+
+| Gate | Mistake it detects |
+|---|---|
+| Contract | Solving the wrong requirement |
+| Execution | Producing an artifact that does not work |
+| Challenge | Using weak, circular, or insensitive verification |
+
 Use multiple gates when the claim's risk, uncertainty, or impact warrants them. The methods must be meaningfully independent. Repeating the same oracle, mock, assumption, or model opinion does not add verification strength.
 
 A valid contradiction cannot be outvoted by passing checks. Resolve it or report the claim as falsified or unverified.
@@ -46,7 +54,7 @@ Ask for clarification only when a missing product decision would materially chan
 
 Convert the request into a bounded set of observable acceptance criteria. For each criterion, state the material claim the final response would need to make.
 
-Before implementation or verification, label which criteria are critical and which gates are required for each one, with a short rationale. Criteria that determine whether the requested outcome was achieved are critical by default. Do not downgrade a criterion because it is difficult to verify.
+Before implementation or verification, label which criteria are critical and which gates are required for each one, with a short rationale. Criteria that determine whether the requested outcome was achieved are critical by default. Critical criteria require all three gates. Do not downgrade a criterion because it is difficult to verify.
 
 Exclude incidental implementation details unless the request makes them part of the contract. Do not expand into a whole-system quality plan.
 
@@ -81,7 +89,16 @@ Assign every material criterion exactly one status:
 - **Blocked:** the check is known, but access, environment, authority, or another concrete dependency prevents execution.
 - **Unverified:** the available method or evidence is insufficient.
 
-Do not turn these statuses into an AI confidence percentage. Report observable counts, such as verified criteria over total material criteria, criteria that completed all three gates with independent evidence, contradictions, and critical criteria still blocked or unverified. Attribute methods per claim rather than presenting an unexplained global method count.
+For each critical claim, also record its triangle outcome:
+
+- **Triangulated:** contract, execution, and challenge gates passed with meaningfully independent evidence. The criterion may be marked verified.
+- **Partially verified:** two gates passed and the third is blocked. Mark the criterion blocked and do not claim full completion.
+- **Contradicted:** at least one gate produced valid counterevidence. Mark the criterion falsified; passing gates cannot outvote it.
+- **Unverified:** no adequate execution evidence establishes the claim. Mark the criterion unverified.
+
+A critical claim is verified only when it is triangulated.
+
+Do not turn these statuses into an AI confidence percentage. Report observable counts, such as triangulated, partially verified, contradicted, and unverified critical claims. Attribute methods per claim rather than presenting an unexplained global method count.
 
 ### 8. Report the verification record
 

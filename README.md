@@ -22,6 +22,25 @@ An agent skill that requires AI-produced engineering work to support its complet
 
 The skill scales the triangle to the claim's risk. It does not require three checks for trivial facts. For consequential claims, multiple methods must be meaningfully independent. A valid contradiction cannot be outvoted by passing checks.
 
+Each gate catches a different mistake:
+
+| Gate | Mistake it detects |
+|---|---|
+| Contract | Solving the wrong requirement |
+| Execution | Producing an artifact that does not work |
+| Challenge | Using weak, circular, or insensitive verification |
+
+## Decision policy
+
+For a critical claim:
+
+- `3/3 passed` means **triangulated** and may be reported as verified.
+- `2/3 passed, 1 blocked` means **partially verified** and remains blocked.
+- Valid counterevidence from any gate means **contradicted** and falsified.
+- No adequate execution evidence means **unverified**.
+
+A critical claim is verified only when it is triangulated.
+
 ## The workflow
 
 ```text
@@ -48,12 +67,11 @@ The skill reports observable results rather than an AI-generated confidence perc
 
 ```text
 Material criteria:       5
-Verified:                4
-Falsified:               0
-Blocked:                 1
+Triangulated:            4
+Partially verified:      1
+Contradicted:            0
 Unverified:              0
 Critical unverified:     1
-Triangulated criteria:   3
 ```
 
 Passing an unrelated suite, repeating the same oracle, or asking several agents for opinions does not strengthen a claim. The verification record attributes each method to a specific claim, so aggregate counts cannot hide duplicated evidence.
@@ -116,4 +134,4 @@ make-verifiable/
 
 ## Design principle
 
-> A material completion claim is valid only to the extent that its recorded evidence can be checked and challenged.
+> A material claim is verified only when intent, observed behavior, and an independent attempt to disprove it agree.

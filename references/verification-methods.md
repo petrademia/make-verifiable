@@ -27,9 +27,11 @@ Examples of stronger combinations:
 
 ## Scale the triangle to risk
 
-The contract gate applies to every material claim. Use the execution gate whenever the artifact can be exercised. Add the challenge gate when any of these conditions holds:
+The contract gate applies to every material claim. Use the execution gate whenever the artifact can be exercised. Critical claims require contract, execution, and challenge gates with meaningfully independent evidence.
 
-- the claim is critical, costly, or hard to reverse;
+For noncritical claims, add the challenge gate when any of these conditions holds:
+
+- the claim is costly or hard to reverse;
 - the implementation and primary check share assumptions;
 - the bug or regression was previously missed by existing checks;
 - a passing check could be insensitive to the changed behavior;
@@ -37,6 +39,17 @@ The contract gate applies to every material claim. Use the execution gate whenev
 - the agent is making a causal or broad compatibility claim.
 
 If a gate cannot run, mark the criterion blocked or unverified. Do not silently lower the standard.
+
+## Decision policy for critical claims
+
+| Gate result | Triangle outcome | Criterion status |
+|---|---|---|
+| Three passed | Triangulated | Verified |
+| Two passed and one blocked | Partially verified | Blocked |
+| Any valid counterevidence | Contradicted | Falsified |
+| No adequate execution evidence | Unverified | Unverified |
+
+A failed command is not automatically counterevidence. Distinguish an environmental or tooling failure, which may block verification, from an observation that falsifies the claim.
 
 ## Methods by task
 
