@@ -38,7 +38,7 @@ Each gate targets a different mistake:
 | Execution | Producing an artifact that does not work |
 | Challenge | Using weak, circular, or insensitive verification |
 
-Use multiple gates when the claim's risk, uncertainty, or impact warrants them. The methods must be meaningfully independent. Repeating the same oracle, mock, assumption, or model opinion does not add verification strength.
+The Contract gate applies to every material claim. A standard-assurance claim also needs the most direct applicable observation, normally Execution. An elevated-assurance claim requires all three gates. The methods must be meaningfully independent. Repeating the same oracle, mock, assumption, or model opinion does not add verification strength.
 
 A valid contradiction cannot be outvoted by passing checks. Resolve it or report the claim as falsified or unverified.
 
@@ -56,7 +56,12 @@ Ask for clarification only when a missing product decision would materially chan
 
 Convert the request into a bounded set of observable acceptance criteria. For each criterion, state the material claim the final response would need to make.
 
-Before implementation or verification, label which criteria are critical and which gates are required for each one, with a short rationale. Criteria that determine whether the requested outcome was achieved are critical by default. Critical criteria require all three gates. Do not downgrade a criterion because it is difficult to verify.
+Before implementation or verification, classify each criterion along two separate dimensions:
+
+- **Completion role:** required or supplemental. Explicit acceptance criteria and conditions that determine the requested outcome are required by default.
+- **Assurance level:** standard or elevated, with a short risk-based rationale. Use elevated assurance for claims whose failure would be costly or hard to reverse, whose evidence shares assumptions with the implementation, or that make causal, security, financial, migration, or broad compatibility assertions.
+
+Required does not imply elevated. A trivial task may have one required criterion that needs only standard assurance. Do not lower the assurance level because a check is difficult to run.
 
 Exclude incidental implementation details unless the request makes them part of the contract. Do not expand into a whole-system quality plan.
 
@@ -86,23 +91,16 @@ Never report a check as passed when it was not run. If a check is unstable, read
 
 ### 7. Evaluate evidence
 
-Assign every material criterion exactly one status:
+Evaluate every material criterion using this precedence order:
 
-- **Verified:** all required checks passed and no unresolved evidence contradicts the claim.
-- **Falsified:** valid evidence contradicts the claim.
-- **Blocked:** the check is known, but access, environment, authority, or another concrete dependency prevents execution.
-- **Unverified:** the available method or evidence is insufficient.
+1. **Falsified:** valid counterevidence from any gate contradicts the claim. Passing checks cannot outvote it.
+2. **Blocked:** no counterevidence exists, but at least one required gate has a known check that a concrete dependency, missing authority, unavailable environment, or safety constraint prevents from running.
+3. **Unverified:** no counterevidence or blocker exists, but at least one required gate lacks an adequate method or sufficient evidence.
+4. **Verified:** every required gate passed and no unresolved evidence contradicts the claim.
 
-For each critical claim, also record its triangle outcome:
+Also label a verified claim **Triangulated** when Contract, Execution, and Challenge all passed with meaningfully independent evidence. Elevated-assurance claims are verified only when triangulated. For other incomplete combinations, report which gates passed without inventing another completion status.
 
-- **Triangulated:** contract, execution, and challenge gates passed with meaningfully independent evidence. The criterion may be marked verified.
-- **Partially verified:** two gates passed and the third is blocked. Mark the criterion blocked and do not claim full completion.
-- **Contradicted:** at least one gate produced valid counterevidence. Mark the criterion falsified; passing gates cannot outvote it.
-- **Unverified:** no adequate execution evidence establishes the claim. Mark the criterion unverified.
-
-A critical claim is verified only when it is triangulated.
-
-Do not turn these statuses into an AI confidence percentage. Report observable counts, such as triangulated, partially verified, contradicted, and unverified critical claims. Attribute methods per claim rather than presenting an unexplained global method count.
+Do not turn these statuses into an AI confidence percentage. Report observable counts by criterion status and the triangulated subset. Attribute methods per claim rather than presenting an unexplained global method count.
 
 ### 8. Report the verification record
 
@@ -114,7 +112,7 @@ Report:
 - the assigned status;
 - contradictions, limitations, and exact follow-up checks for blocked work.
 
-Claim full completion only when every critical acceptance criterion is verified. Otherwise state the narrower result that the evidence supports.
+Claim full completion only when every required acceptance criterion is verified at its declared assurance level. Otherwise state the narrower result that the evidence supports.
 
 ## Guardrails
 

@@ -20,7 +20,7 @@ An agent skill that requires AI-produced engineering work to support its complet
 - **Execution** observes the real artifact through a relevant user, runtime, compiler, data, or integration path.
 - **Challenge** uses a different method to expose a false claim, insensitive check, or circular assumption.
 
-The skill scales the triangle to the claim's risk. It does not require three checks for trivial facts. For consequential claims, multiple methods must be meaningfully independent. A valid contradiction cannot be outvoted by passing checks.
+The skill separates whether a criterion is required for completion from how much assurance its claim needs. A required typo correction may need a direct check. A required payment-integrity claim needs all three independent gates. A valid contradiction cannot be outvoted by passing checks.
 
 Each gate catches a different mistake:
 
@@ -32,14 +32,20 @@ Each gate catches a different mistake:
 
 ## Decision policy
 
-For a critical claim:
+Each criterion has a completion role and an assurance level:
 
-- `3/3 passed` means **triangulated** and may be reported as verified.
-- `2/3 passed, 1 blocked` means **partially verified** and remains blocked.
-- Valid counterevidence from any gate means **contradicted** and falsified.
-- No adequate execution evidence means **unverified**.
+- Required criteria gate the completion claim; supplemental criteria do not.
+- Standard-assurance claims need Contract plus the most direct applicable observation.
+- Elevated-assurance claims require Contract, Execution, and Challenge with independent evidence.
 
-A critical claim is verified only when it is triangulated.
+The outcome policy has explicit precedence:
+
+1. Valid counterevidence means **Falsified**.
+2. A known required check that cannot run means **Blocked**.
+3. Missing or inadequate evidence means **Unverified**.
+4. All required gates passing means **Verified**.
+
+A verified claim is also **Triangulated** when all three independent gates pass.
 
 Challenge checks must stay contained and reversible. Conflicting tickets, specifications, tests, documentation, or observed behavior block the contract gate until an authorized source resolves the disagreement.
 
@@ -61,7 +67,7 @@ Run the checks and record evidence
 Report verified, falsified, blocked, and unverified criteria
 ```
 
-The agent may claim full completion only when every critical acceptance criterion is verified.
+The agent may claim full completion only when every required acceptance criterion is verified at its declared assurance level.
 
 ## Evidence instead of confidence
 
@@ -69,14 +75,21 @@ The skill reports observable results rather than an AI-generated confidence perc
 
 ```text
 Material criteria:       5
-Triangulated:            4
-Partially verified:      1
-Contradicted:            0
+Verified:                4
+Falsified:               0
+Blocked:                 1
 Unverified:              0
-Critical unverified:     1
+Triangulated subset:     3
+Required incomplete:     1
 ```
 
 Passing an unrelated suite, repeating the same oracle, or asking several agents for opinions does not strengthen a claim. The verification record attributes each method to a specific claim, so aggregate counts cannot hide duplicated evidence.
+
+## Behavioral evaluations
+
+The [`evals/`](evals/) directory contains blind scenario inputs, small fixtures, expected decisions, a decision-based rubric, and recorded independent runs. The initial set covers a trivial edit, misleading passing tests, conflicting requirements, unavailable runtime access, and an unsafe destructive challenge.
+
+Evaluators receive the skill, one scenario, and its fixture. They do not receive expected decisions or earlier run results until scoring. The evaluation checks decisions and evidence handling rather than matching generated wording.
 
 ## Example
 
@@ -129,6 +142,12 @@ make-verifiable/
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
+├── evals/
+│   ├── fixtures/
+│   ├── scenarios/
+│   ├── expected/
+│   ├── runs/
+│   └── rubric.md
 └── references/
     ├── reproducibility.md
     └── verification-methods.md

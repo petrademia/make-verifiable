@@ -38,11 +38,18 @@ When sources disagree:
 
 Do not infer precedence from whichever source makes the implementation easiest or supports the agent's current theory.
 
-## Scale the triangle to risk
+## Separate completion role from assurance
 
-The contract gate applies to every material claim. Use the execution gate whenever the artifact can be exercised. Critical claims require contract, execution, and challenge gates with meaningfully independent evidence.
+Classify each criterion twice:
 
-For noncritical claims, add the challenge gate when any of these conditions holds:
+| Dimension | Values | Effect |
+|---|---|---|
+| Completion role | Required or supplemental | Required criteria must be verified before claiming full completion |
+| Assurance level | Standard or elevated | Elevated criteria require all three independent gates |
+
+These dimensions answer different questions. A typo correction can be required for completion while remaining standard assurance. A payment-integrity claim can be required and elevated.
+
+The Contract gate applies to every material claim. A standard-assurance claim also needs the most direct applicable observation, normally Execution. Add or elevate to the Challenge gate when any of these conditions holds:
 
 - the claim is costly or hard to reverse;
 - the implementation and primary check share assumptions;
@@ -51,18 +58,22 @@ For noncritical claims, add the challenge gate when any of these conditions hold
 - the evidence is probabilistic, indirect, or incomplete;
 - the agent is making a causal or broad compatibility claim.
 
-If a gate cannot run, mark the criterion blocked or unverified. Do not silently lower the standard.
+Do not lower assurance merely because a gate is difficult to run. Apply the outcome precedence below.
 
-## Decision policy for critical claims
+## Outcome precedence
 
-| Gate result | Triangle outcome | Criterion status |
+Evaluate conditions from top to bottom and stop at the first match:
+
+| Priority | Condition | Criterion status |
 |---|---|---|
-| Three passed | Triangulated | Verified |
-| Two passed and one blocked | Partially verified | Blocked |
-| Any valid counterevidence | Contradicted | Falsified |
-| No adequate execution evidence | Unverified | Unverified |
+| 1 | Any gate produced valid counterevidence | Falsified |
+| 2 | A required gate has a known check that cannot run because of a concrete dependency, authority, environment, or safety constraint | Blocked |
+| 3 | A required gate lacks an adequate method or sufficient evidence | Unverified |
+| 4 | Every required gate passed and no contradiction remains | Verified |
 
-A failed command is not automatically counterevidence. Distinguish an environmental or tooling failure, which may block verification, from an observation that falsifies the claim.
+Label a verified criterion **Triangulated** when all three gates passed with meaningfully independent evidence. Passing one or two gates may be reported as supporting evidence, but it does not create another completion status.
+
+A failed command is not automatically counterevidence. Distinguish an environmental or tooling failure, which may block verification, from an observation that falsifies the claim. When a check has not been designed or its evidence is inadequate, use Unverified rather than Blocked.
 
 ## Methods by task
 
