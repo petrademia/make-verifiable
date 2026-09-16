@@ -38,7 +38,13 @@ Inventory only sources that can affect the selected behavior. Typical sources in
 
 Follow evidence to the earliest boundary where an uncontrolled value or event changes the outcome. Read [sources-and-treatments.md](references/sources-and-treatments.md) when classifying a source or choosing a treatment.
 
-### 4. Choose the smallest control point
+### 4. Define bounded proof obligations
+
+For the selected behavior, state the meaningful properties that must hold and the failure scenarios in which causally relevant variability could violate them. Prefer a small, ranked set supported by runtime evidence, impact, or a credible boundary identified during tracing.
+
+Connect each scenario to a proof method. Include perturbations that can distinguish a causal control from a merely stable-looking test. Do not create an exhaustive whole-system failure matrix or drift into generic test planning.
+
+### 5. Choose the smallest control point
 
 Prefer, in order:
 
@@ -52,23 +58,24 @@ Prefer, in order:
 
 Introduce only the control the evidence requires. A clock, RNG, scheduler, ID generator, adapter, simulator, or record/replay layer is an option, not a default deliverable.
 
-### 5. Implement without changing the product contract
+### 6. Implement without changing the product contract
 
 Keep production behavior intact unless the user requested a product change. Put the seam at the responsible boundary, preserve the normal production implementation, and make controlled behavior explicit in tests or verification scenarios.
 
 Avoid unrelated cleanup. If the necessary change crosses multiple architectural boundaries or would materially serialize, mock, or redesign production behavior, stop and present the tradeoff before expanding scope.
 
-### 6. Prove the result
+### 7. Prove the result
 
 Add or adapt the smallest regression scenario that would expose the original variability. Use the proof method appropriate to the source: repeated execution, seed replay, controlled schedule, recorded interaction, canonical comparison, or invariant checking.
 
-Read [proving-reproducibility.md](references/proving-reproducibility.md) when selecting the proof or reporting confidence. A single green run is not evidence of reproducibility.
+Read [proving-reproducibility.md](references/proving-reproducibility.md) when defining proof obligations, selecting the proof, or reporting confidence. A single green run is not evidence of reproducibility.
 
-### 7. Report and stop
+### 8. Report and stop
 
 Report:
 
 - the behavior and contract examined;
+- the bounded properties and failure scenarios exercised;
 - the causally relevant uncontrolled input;
 - the control introduced and why it is the narrowest useful one;
 - the verification performed and its observed result;

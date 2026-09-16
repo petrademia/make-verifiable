@@ -13,6 +13,8 @@ Trace it end to end and establish a baseline
     ↓
 Map causally relevant nondeterminism and evidence gaps
     ↓
+Define bounded properties and failure scenarios
+    ↓
 Choose the smallest high-leverage control point
     ↓
 Make that input controllable and add the minimum proof mechanism
@@ -32,6 +34,7 @@ It is designed to:
 
 - distinguish genuine nondeterminism from ordinary input-dependent bugs;
 - follow evidence to the first uncontrolled input that changes the outcome;
+- derive a small set of contract-level properties and causally credible failure scenarios;
 - preserve production semantics while exposing a focused control seam;
 - reuse the repository's existing tests and application-driving infrastructure;
 - require repeatable proof rather than accepting one green run;
@@ -52,9 +55,10 @@ A good run should:
 1. trace the payment-expiration behavior rather than scan the whole repository;
 2. show whether wall-clock time actually causes the inconsistent result;
 3. introduce a controllable instant or narrow clock boundary only if the evidence supports it;
-4. replace timing-dependent waiting with an explicit condition;
-5. prove the deadline behavior without sleeping;
-6. report the evidence and stop.
+4. state the deadline property and exercise the relevant boundary-crossing scenarios;
+5. replace timing-dependent waiting with an explicit condition;
+6. prove the deadline behavior without sleeping, including a perturbation that detects the boundary;
+7. report the evidence and stop.
 
 ## Install
 
@@ -96,4 +100,4 @@ make-reproducible/
 
 ## Design principle
 
-> Control one causally relevant source of variability, prove the improvement, record what remains, and stop.
+> Define what must hold, control one causally relevant source of variability, prove the improvement, record what remains, and stop.
