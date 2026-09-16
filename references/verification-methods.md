@@ -25,6 +25,19 @@ Examples of stronger combinations:
 - a compiler or schema check and a live compatibility probe;
 - a benchmark and a profiler trace tied to the same workload.
 
+## Contract conflicts
+
+Potential contract sources include the current user instruction, ticket, formal specification, repository documentation, tests, API or schema definitions, and observed production behavior. They do not automatically have equal authority.
+
+When sources disagree:
+
+1. State the conflicting claims and cite their sources.
+2. Apply an explicit precedence rule from the repository or user when one exists.
+3. If the conflict changes the required outcome and no authorized rule resolves it, block the contract gate and request a decision.
+4. Preserve the conflict in the verification record.
+
+Do not infer precedence from whichever source makes the implementation easiest or supports the agent's current theory.
+
 ## Scale the triangle to risk
 
 The contract gate applies to every material claim. Use the execution gate whenever the artifact can be exercised. Critical claims require contract, execution, and challenge gates with meaningfully independent evidence.
@@ -75,6 +88,18 @@ Choose a challenge that can expose false confidence:
 - **Fault injection:** force the error, timeout, retry, crash, or partial completion that the claim says is handled.
 
 Do not run every pattern. Select the smallest one that can falsify the material claim.
+
+## Safe challenges
+
+Challenge evidence is useful only when obtaining it stays within the task's authority and acceptable risk. Prefer:
+
+- an isolated worktree or disposable environment;
+- fixtures, copied data, or an ephemeral database;
+- a dry run or read-only probe;
+- a transaction or deployment that has a tested rollback;
+- a local mutation of the change or test rather than a live-system mutation.
+
+Before fault injection, rollback, destructive input, or an external write, resolve the exact target, expected effect, stopping condition, and recovery path. Do not test against production or mutate external state without explicit authorization. If safe execution is unavailable, mark the challenge gate blocked and state the exact check that remains.
 
 ## Evidence record
 

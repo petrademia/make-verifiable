@@ -41,6 +41,8 @@ For a critical claim:
 
 A critical claim is verified only when it is triangulated.
 
+Challenge checks must stay contained and reversible. Conflicting tickets, specifications, tests, documentation, or observed behavior block the contract gate until an authorized source resolves the disagreement.
+
 ## The workflow
 
 ```text

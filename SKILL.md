@@ -48,6 +48,8 @@ A valid contradiction cannot be outvoted by passing checks. Resolve it or report
 
 Read repository instructions and the relevant runtime path. Extract the requested outcome, constraints, affected behavior, and explicit acceptance criteria. Mark any interpretation the agent introduced.
 
+Compare the request, ticket, specification, documentation, tests, and observed behavior when they can define the contract. If authoritative sources materially conflict, record the conflict and do not pass the contract gate until an authorized decision resolves it. Do not choose the source that merely supports the proposed implementation.
+
 Ask for clarification only when a missing product decision would materially change the result. Otherwise proceed with a stated, reversible interpretation.
 
 ### 2. Define material criteria and claims
@@ -63,6 +65,8 @@ Exclude incidental implementation details unless the request makes them part of 
 Map each material claim to its contract, execution, and challenge checks as applicable. Record what each check can prove and the result that would falsify the claim.
 
 Prefer direct observations of the real artifact. Use [verification-methods.md](references/verification-methods.md) when selecting independent methods or scaling the triangle to task risk.
+
+Design challenge checks to be contained and reversible. Prefer isolated worktrees, disposable environments, fixtures, copied data, dry runs, or transactions that can be rolled back. Do not mutate production or external state merely to obtain stronger evidence; obtain explicit authorization when a necessary challenge would do so.
 
 ### 4. Establish the before state when relevant
 
@@ -121,5 +125,7 @@ Claim full completion only when every critical acceptance criterion is verified.
 - Do not invent certainty scores or describe work as foolproof.
 - Do not require three checks for trivial claims when one direct check is sufficient.
 - Do not describe a narrow validator as proof of parts it does not inspect.
+- Do not pass the contract gate while authoritative requirements remain materially inconsistent.
+- Do not run destructive or externally mutating challenges without explicit authorization and a bounded recovery plan.
 - Do not broaden the task merely to improve a verification metric.
 - Do not post evidence or change external ticket state unless the user requested that action.
