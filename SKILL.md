@@ -44,17 +44,26 @@ A valid contradiction cannot be outvoted by passing checks. Once the contract is
 
 ## Workflow
 
-### 1. Ground the request
+### 1. Resolve the execution contract
 
 Read repository instructions and the relevant runtime path. Extract the requested outcome, constraints, affected behavior, and explicit acceptance criteria. Mark any interpretation the agent introduced.
 
 Compare the request, ticket, specification, documentation, tests, and observed behavior when they can define the contract. If authoritative sources materially conflict, record the conflict and do not pass the contract gate until an authorized decision resolves it. Do not choose the source that merely supports the proposed implementation.
 
-Ask for clarification only when a missing product decision would materially change the result. Otherwise proceed with a stated, reversible interpretation.
+Before implementation, record a concise execution contract in the task's working notes or response. Do this when the skill is invoked with an ordinary ticket or prompt; the user does not need to request contract resolution separately. Include only details relevant to the requested outcome:
+
+- observable inputs, outputs, errors, and state changes;
+- defaults, boundary cases, ordering, and retry behavior where they affect acceptance;
+- scope and explicit exclusions;
+- the sources or authorized decisions supporting the behavior, with agent assumptions labeled separately.
+
+Resolve material ambiguity from authoritative sources first. Ask for clarification only when a missing product decision would materially change observable behavior or acceptance. Keep dependent implementation blocked while that decision is missing; continue independent work. Otherwise proceed with a stated, reversible interpretation. Do not turn an assumption into an approved requirement.
+
+Keep trivial tasks to a short criterion rather than a full specification. The contract should make intended behavior consistent across executions without prescribing identical code or tool sequences.
 
 ### 2. Define material criteria and claims
 
-Convert the request into a bounded set of observable acceptance criteria. For each criterion, state the material claim the final response would need to make.
+Convert the execution contract into a bounded set of observable acceptance criteria. Trace each required criterion to its source or recorded decision, and use concrete inputs and expected outcomes where they clarify behavior. For each criterion, state the material claim the final response would need to make.
 
 Before implementation or verification, classify each criterion along two separate dimensions:
 
@@ -82,6 +91,8 @@ If the reported problem cannot be observed, distinguish "reported," "inferred," 
 ### 5. Implement or inspect the scoped change
 
 Make the smallest change that satisfies the criteria, unless the user requested assessment only. Preserve unrelated behavior and avoid cleanup that does not improve the required evidence.
+
+Use the same execution contract for implementation and verification. If new evidence requires a contract change, record its source and reason, resolve any material product decision, and update affected criteria and checks before continuing dependent work. Never silently weaken the contract to fit the implementation.
 
 ### 6. Execute and record
 

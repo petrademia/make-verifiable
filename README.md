@@ -4,6 +4,8 @@ An agent skill that requires AI-produced engineering work to support its complet
 
 `make-verifiable` turns a request, specification, or Jira ticket into observable acceptance criteria. It maps each material claim to relevant checks, runs those checks against the real artifact, records contradictions, and reports exactly what was verified, falsified, blocked, or left unverified.
 
+Before implementation, it resolves a concise execution contract: relevant inputs, outputs, errors, state changes, boundaries, and scope. It separates sourced requirements from assumptions and asks about missing product decisions that would change acceptance. Implementation and verification use the same contract; changes to it require a recorded source and reason. This aims for consistent intended behavior across executions, not identical code or tool sequences.
+
 ## The verification triangle
 
 ```text
@@ -54,7 +56,7 @@ Challenge checks must stay contained and reversible. Conflicting tickets, specif
 ```text
 Understand the request and repository
     ↓
-Extract observable acceptance criteria
+Resolve the execution contract and acceptance criteria
     ↓
 Map material claims to verification gates
     ↓
@@ -96,7 +98,7 @@ Evaluators receive the skill, one scenario, and its fixture. They do not receive
 Prompt:
 
 ```text
-$make-verifiable Implement PROJ-123 and provide evidence for every material completion claim.
+$make-verifiable Implement PROJ-123.
 ```
 
 For a duplicate-payment bug, a useful verification record might include:
@@ -128,6 +130,8 @@ git clone https://github.com/petrademia/make-verifiable.git ~/.codex/skills/make
 ```
 
 ## Use
+
+Provide the task and its constraints. Contract resolution and verification are built into the skill; prompts do not need to repeat the workflow.
 
 ```text
 $make-verifiable Review this change against the ticket. Define the material criteria, run independent checks where warranted, and report only the claims supported by evidence.
