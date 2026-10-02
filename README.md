@@ -172,4 +172,4 @@ make-verifiable/
 
 ## Design principle
 
-> A material claim is verified only when intent, observed behavior, and an independent attempt to disprove it agree.
+> Verify each claim against its contract and the evidence required by its assurance level. Standard assurance needs the most direct applicable observation; elevated assurance also requires an independent challenge. Unresolved contradictory evidence prevents verification.
