@@ -1,21 +1,21 @@
 # Architecture and design quality
 
-Use for requested repository or service coherence assessments and for screening relevant dimensions during broad verification requests. Keep screening scoped to the target established from context. These dimensions guide investigation; they are not mandatory violations to find or a prescription for one architecture.
+Use this guide for repository or service coherence assessments and to select design dimensions for broad verification requests. Stay within the target established from context. Use the dimensions to investigate the code, without assuming each must reveal a defect or require a particular architecture.
 
 ## Establish the assessment boundary
 
-Identify the requested repository, service, or subsystem and the available evidence. Map its principal responsibilities, entry points, dependencies, data owners, and representative end-to-end flows. Prioritize boundaries relevant to the user's concerns or consequential behavior. Report inspected paths, exclusions, and unavailable components; do not infer coverage from file counts or a passing suite.
+Identify the requested repository, service, or subsystem and the available evidence. Map its main responsibilities, entry points, dependencies, data owners, and representative end-to-end flows. Prioritize boundaries that affect the user's concerns or behavior whose failure would be costly. Report inspected paths, exclusions, and unavailable components. File counts and passing tests do not establish that coverage.
 
-Read declared architecture rules, domain definitions, interface contracts, schemas, configuration, and relevant callers and implementations. Separate authoritative requirements from inferred conventions. Missing architecture documentation permits investigation, but does not authorize inventing an architecture that the code must follow.
+Read declared architecture rules, domain definitions, interface contracts, schemas, configuration, and relevant callers and implementations. Separate authoritative requirements from inferred conventions. If architecture documentation is missing, label any inferred rules. Do not invent requirements for the code.
 
 ## Assessment dimensions
 
 | Dimension | Question and useful evidence | Interpretation guardrail |
 |---|---|---|
-| Cohesion | Do responsibilities within a component belong together? Trace its operations, owned concepts, and reasons for change; use change history when available. | Size or function count alone does not establish poor cohesion. A cohesive component may be substantial. |
+| Cohesion | Do responsibilities within a component belong together? Trace its operations, owned concepts, and reasons for change. Use change history when available. | Size or function count alone does not establish poor cohesion. A cohesive component may be substantial. |
 | Coupling | What implementation details, data formats, operation ordering, availability, or coordinated changes does one component require from another? Inspect callers, imports, shared storage, deployment assumptions, and failure propagation. | Dependencies are necessary. Explain a concrete change or failure scenario before calling coupling a risk. |
-| Encapsulation / information hiding | Does the owner of state or policy enforce its rules through a stable boundary? Look for direct internal writes, leaked representations, and rules callers must duplicate. | A public field or shared table is not automatically a defect; identify the ownership rule or consequence. |
-| Separation of concerns | Can business rules be reached consistently through HTTP, jobs, events, and other relevant entry points? Trace policy, transport, persistence, and presentation responsibilities. | Do not prescribe extra layers or classes when existing functions separate the responsibilities adequately. |
+| Encapsulation / information hiding | Does the owner of state or policy enforce its rules through a stable boundary? Look for direct internal writes, leaked representations, and rules callers must duplicate. | Identify the ownership rule or consequence before treating a public field or shared table as a defect. |
+| Separation of concerns | Do HTTP handlers, jobs, events, and other relevant entry points apply the same business rules? Trace policy, transport, persistence, and presentation responsibilities. | Do not prescribe extra layers or classes when existing functions separate the responsibilities adequately. |
 | Architectural conformance | Do actual dependencies, writes, and calls follow declared layering, ownership, or communication rules? Compare the rule with the concrete violating path. | Label inferred patterns separately. Architectural preference is not an authoritative rule. |
 | Contract compatibility | Does the caller meet the provider's preconditions, and does the provider supply the guarantees the caller needs? Compare types, errors, timing, retries, ordering, and consistency expectations. | Matching signatures or schemas does not establish behavioral compatibility. Inspect adapters and protections before alleging a mismatch. |
 | Semantic consistency | Do exchanged concepts preserve meaning through producers, transformations, storage, and consumers? Trace units, identifiers, statuses, nullability, and time conventions. | Different bounded contexts may intentionally use different models. Check the translation at their boundary rather than demanding one global model. |
@@ -23,25 +23,25 @@ Read declared architecture rules, domain definitions, interface contracts, schem
 
 ## Investigate relationships before choosing tools
 
-1. State a bounded expectation, its source, and the relationship under inspection. For example: "Every caller of this payment operation supplies a stable idempotency key on retries."
+1. State a specific expectation, its source, and the relationship under inspection. For example: "Every caller of this payment operation supplies a stable idempotency key on retries."
 2. Follow the relevant path across components. Check both the caller's assumptions and the provider's guarantees, including intervening conversions and guards.
-3. Seek a counterexample or intentional explanation. A retry wrapper, transaction constraint, version adapter, or documented context boundary may resolve an apparent contradiction.
-4. Select the smallest applicable check: direct source or dependency inspection, schema comparison, an existing contract test, a runtime trace, or a contained scenario. Do not substitute a catalogue of tools for the analysis.
-5. Apply the main skill's assurance and evidence rules. Static evidence can establish a structural dependency; it does not by itself establish runtime failure frequency, performance, or reachability under production configuration.
+3. Look for evidence that disproves the suspected issue or explains the design. A retry wrapper, transaction constraint, version adapter, or documented context boundary may resolve an apparent contradiction.
+4. Select the smallest applicable check: direct source or dependency inspection, schema comparison, an existing contract test, a runtime trace, or a contained scenario. Choose checks that can settle the question.
+5. Apply the main skill's assurance and evidence rules. Static evidence can establish a structural dependency. Runtime failure frequency, performance, and reachability under production configuration need further evidence.
 
 For example, if a producer documents amounts in cents and a consumer treats them as dollars, cite both definitions and trace the actual transfer, including any conversion. If a conversion resolves the difference, there is no mismatch. If the transfer is unavailable, report the unresolved question and the evidence needed to settle it.
 
 ## Report findings and coverage
 
-For each finding, record the relevant dimension, rule or quality goal and its authority, precise evidence locations, affected relationship or path, consequence, and evidence limitations. Suggest a correction only as far as the evidence supports it.
+For each finding, record the relevant dimension, rule or quality goal and its authority, precise evidence locations, affected relationship or path, consequence, and evidence limitations. Recommend corrections supported by the evidence.
 
 Distinguish finding types from the main skill's criterion statuses:
 
-- **Demonstrated defect:** evidence establishes a violated contract, invariant, or declared architecture rule. State the proposition being evaluated so that a verified defect finding is not confused with verified system correctness.
-- **Design risk or tradeoff:** evidence shows a dependency or structure with a concrete potential consequence under stated conditions. Explain the relevant goal and any known benefit; do not present the potential consequence as an observed failure.
-- **Unresolved question:** missing authority, implementation, configuration, or runtime evidence prevents a conclusion. State what would resolve it.
+- A demonstrated defect violates a contract, invariant, or declared architecture rule. State the claim being checked. Confirming a defect does not verify system correctness.
+- A design risk or tradeoff has a specific potential consequence under stated conditions. Cite the dependency or structure, explain the relevant goal and any known benefit, and distinguish the risk from an observed failure.
+- An unresolved question lacks a required decision, implementation, configuration, or runtime evidence. State what would resolve it.
 
-Group symptoms with one underlying cause rather than counting the same issue once per dimension. Summarize inspected components and flows, methods used, exclusions, and outstanding questions. If no issue was found, say so within that coverage; do not conclude that every relationship is coherent. Keep assessment read-only unless changes were requested.
+Group symptoms with one underlying cause rather than counting the same issue once per dimension. Summarize inspected components and flows, methods used, exclusions, and outstanding questions. If you find no issue, report that result within the inspected scope. Do not conclude that every relationship is coherent. Keep assessment read-only unless changes were requested.
 
 ## Background
 

@@ -1,10 +1,10 @@
-# Make Verifiable
+# Make verifiable
 
-An agent skill that requires AI-produced engineering work to support its completion claims with checkable evidence.
+An agent skill that checks engineering work and requires evidence before claiming completion.
 
 `make-verifiable` turns a request, specification, or Jira ticket into observable acceptance criteria. It maps each material claim to relevant checks, runs those checks against the real artifact, records contradictions, and reports exactly what was verified, falsified, blocked, or left unverified.
 
-Before implementation, it resolves a concise execution contract: relevant inputs, outputs, errors, state changes, boundaries, and scope. It separates sourced requirements from assumptions and asks about missing product decisions that would change acceptance. Implementation and verification use the same contract; changes to it require a recorded source and reason. This aims for consistent intended behavior across executions, not identical code or tool sequences.
+Before implementation, it records an execution contract covering inputs, outputs, errors, state changes, boundaries, and scope. It separates sourced requirements from assumptions and asks about missing product decisions that would change acceptance. Implementation and verification use the same contract. Changes to it require a recorded source and reason. The contract defines consistent expected behavior while allowing different implementations.
 
 ## The verification triangle
 
@@ -22,7 +22,7 @@ Before implementation, it resolves a concise execution contract: relevant inputs
 - **Execution** observes the real artifact through a relevant user, runtime, compiler, data, or integration path.
 - **Challenge** uses a different method to expose a false claim, insensitive check, or circular assumption.
 
-The skill separates whether a criterion is required for completion from how much assurance its claim needs. A required typo correction may need a direct check. A required payment-integrity claim needs all three independent gates. A valid contradiction cannot be outvoted by passing checks.
+The skill separates whether a criterion is required for completion from how much assurance its claim needs. A required typo correction may need a direct check. A required payment-integrity claim needs all three independent gates. Passing checks cannot override valid contradictory evidence.
 
 Each gate catches a different mistake:
 
@@ -36,11 +36,11 @@ Each gate catches a different mistake:
 
 Each criterion has a completion role and an assurance level:
 
-- Required criteria gate the completion claim; supplemental criteria do not.
+- Required criteria must pass before the agent claims completion. Supplemental criteria do not determine completion.
 - Standard-assurance claims need Contract plus the most direct applicable observation.
 - Elevated-assurance claims require Contract, Execution, and Challenge with independent evidence.
 
-The outcome policy has explicit precedence:
+Evaluate outcomes in this order:
 
 1. With a settled contract, valid counterevidence means **Falsified**.
 2. An unresolved authoritative contract conflict, or a known required check that cannot run, means **Blocked**.
@@ -85,7 +85,7 @@ Triangulated subset:     3
 Required incomplete:     1
 ```
 
-Passing an unrelated suite, repeating the same oracle, or asking several agents for opinions does not strengthen a claim. The verification record attributes each method to a specific claim, so aggregate counts cannot hide duplicated evidence.
+Passing an unrelated suite, repeating the same oracle, or asking several agents for opinions does not strengthen a claim. The verification record lists methods for each claim so reviewers can identify duplicated evidence.
 
 ## Behavioral evaluations
 
@@ -119,7 +119,7 @@ $make-verifiable Assess this repository's coherence.
 
 This mode maps components, dependencies, and end-to-end flows, then investigates relevant design dimensions: cohesion, coupling, encapsulation, separation of concerns, architectural conformance, contract compatibility, semantic consistency, and invariant preservation. See [design-quality.md](references/design-quality.md) for the questions and evidence used.
 
-Findings distinguish demonstrated defects, contextual design risks or tradeoffs, and unresolved questions. Each identifies the relevant rule or goal, evidence, and consequence. Reports state inspected coverage and exclusions without claiming universal correctness. Assessments are read-only unless changes are requested; ordinary ticket execution remains scoped to affected components and flows.
+Findings distinguish demonstrated defects, design risks or tradeoffs under stated conditions, and unresolved questions. Each identifies the relevant rule or goal, evidence, and consequence. Reports state what was inspected and excluded. Assessments are read-only unless the user requests changes. Ordinary ticket execution stays within affected components and flows.
 
 ## Unstable checks
 
@@ -141,9 +141,9 @@ git clone https://github.com/petrademia/make-verifiable.git ~/.codex/skills/make
 
 ## Use
 
-Provide the task and its constraints. Contract resolution and verification are built into the skill; prompts do not need to repeat the workflow.
+Provide the task and its constraints. The skill defines the contract and verifies the result without requiring prompts to repeat the workflow.
 
-For "verify everything," the skill states the target inferred from context and screens behavioral expectations and design-quality dimensions within that scope. It explains selected criteria and exclusions before choosing checks, then reports results and coverage gaps. This includes relevant coherence checks without requiring those words in the prompt; it does not trigger a full audit of every dimension or authorize edits during an assessment.
+For "verify everything," the skill states the target inferred from context and considers the expected behavior and relevant design dimensions within that scope. It explains selected criteria and exclusions before choosing checks, then reports results and coverage gaps. It includes relevant coherence checks even when the prompt does not name them. It does not require a full audit of every dimension or authorize edits during an assessment.
 
 ```text
 $make-verifiable Review this change against the ticket. Define the material criteria, run independent checks where warranted, and report only the claims supported by evidence.
