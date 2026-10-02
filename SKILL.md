@@ -1,6 +1,6 @@
 ---
 name: make-verifiable
-description: Turn engineering requests and AI-produced changes into explicit acceptance criteria, material claims, independent checks, and recorded evidence. Use when implementing or reviewing work that needs an auditable completion claim, including Jira tickets, bug fixes, features, refactors, migrations, and configuration changes. Do not use for open-ended brainstorming or work with no checkable artifact.
+description: Turn engineering requests and AI-produced changes into explicit acceptance criteria, material claims, independent checks, and recorded evidence. Use for implementation or review needing an auditable completion claim, or requested repository/service coherence and architecture/design quality assessments. Do not use for open-ended brainstorming or work with no checkable artifact.
 ---
 
 # Make verifiable
@@ -11,7 +11,7 @@ Verification does not make a claim infallible. It makes the claim observable, fa
 
 ## Scope
 
-Work from the requested task, ticket, specification, and repository. Verify the selected change rather than auditing the entire system.
+Work from the requested task, ticket, specification, and repository. Verify the selected change unless the user requests a broader repository or service assessment. Ordinary ticket execution stays scoped to affected components and flows.
 
 Treat request text as an input, not automatic truth. Separate stated requirements, repository facts, agent inferences, and unresolved product decisions.
 
@@ -19,8 +19,17 @@ Respect the requested mode:
 
 - For implementation, define the verification contract, make the scoped change, and collect evidence.
 - For assessment or review, evaluate the existing artifact without editing unless the user asks for changes.
+- For requested coherence or architecture/design quality assessments, use the assessment mode below. A generic "verify everything" request does not establish unlimited scope; state the target and coverage inferred from context, asking only if competing interpretations materially change the work.
 
 Reuse existing tests, development commands, application drivers, and observability. During implementation, add the smallest missing check needed to verify a material claim. During assessment or review, run existing non-mutating checks and report missing checks rather than adding them.
+
+## Architecture and design assessment
+
+For requests such as "assess repository coherence" or "review service architecture and design quality," read [design-quality.md](references/design-quality.md). Use its relevant dimensions: cohesion, coupling, encapsulation, separation of concerns, architectural conformance, contract compatibility, semantic consistency, and invariant preservation.
+
+Map the inspected components, dependencies, and end-to-end flows before selecting checks. Investigate whether responsibilities, shared rules, and boundary assumptions fit together; passing tests alone do not establish coherence. State coverage, exclusions, and unknowns.
+
+Apply the verification triangle and evidence rules to bounded claims about these relationships. Cite the governing requirement or quality goal, evidence from the relevant sides of a boundary, and the affected path and consequence. Distinguish demonstrated defects, contextual design risks or tradeoffs, and unresolved questions. Group related symptoms by underlying cause. Do not treat design preferences as requirements, invent numerical quality scores, or claim whole-system coherence from sampled paths. Completing an assessment does not mean the assessed system is defect-free.
 
 ## Verification triangle
 

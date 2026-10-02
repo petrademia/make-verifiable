@@ -111,6 +111,16 @@ For a duplicate-payment bug, a useful verification record might include:
 
 The agent can claim that the change handles the verified retry scenario. It cannot claim that it established the production incident's exact cause.
 
+## Architecture and design assessment
+
+```text
+$make-verifiable Assess this repository's coherence.
+```
+
+This mode maps components, dependencies, and end-to-end flows, then investigates relevant design dimensions: cohesion, coupling, encapsulation, separation of concerns, architectural conformance, contract compatibility, semantic consistency, and invariant preservation. See [design-quality.md](references/design-quality.md) for the questions and evidence used.
+
+Findings distinguish demonstrated defects, contextual design risks or tradeoffs, and unresolved questions. Each identifies the relevant rule or goal, evidence, and consequence. Reports state inspected coverage and exclusions without claiming universal correctness. Assessments are read-only unless changes are requested; ordinary ticket execution remains scoped to affected components and flows.
+
 ## Unstable checks
 
 Reproducibility is an optional verification technique. If a required check varies because of time, randomness, ordering, concurrency, or external inputs, the skill controls only the relevant source and then reruns the verification. It does not try to make the whole service deterministic.
@@ -153,6 +163,7 @@ make-verifiable/
 │   ├── runs/
 │   └── rubric.md
 └── references/
+    ├── design-quality.md
     ├── reproducibility.md
     └── verification-methods.md
 ```
