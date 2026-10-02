@@ -19,9 +19,17 @@ Respect the requested mode:
 
 - For implementation, define the verification contract, make the scoped change, and collect evidence.
 - For assessment or review, evaluate the existing artifact without editing unless the user asks for changes.
-- For requested coherence or architecture/design quality assessments, use the assessment mode below. A generic "verify everything" request does not establish unlimited scope; state the target and coverage inferred from context, asking only if competing interpretations materially change the work.
+- For requested coherence or architecture/design quality assessments, use the assessment mode below.
 
 Reuse existing tests, development commands, application drivers, and observability. During implementation, add the smallest missing check needed to verify a material claim. During assessment or review, run existing non-mutating checks and report missing checks rather than adding them.
+
+## Broad verification requests
+
+For requests such as "verify everything," identify the target from the conversation and repository evidence: the recent change, ticket, service, or repository. State that scope; ask only if competing interpretations materially change the work. The phrase does not authorize an unlimited audit or edits during an assessment.
+
+Before selecting checks, screen behavioral expectations and the design-quality dimensions in [design-quality.md](references/design-quality.md) within that scope. Derive concrete criteria from requirements, affected flows, dependency contracts, and material risks. Select relevant design dimensions even when the user did not explicitly say "coherence"; screening does not require a full audit of every dimension.
+
+State the selected criteria and why they apply, and briefly identify excluded dimensions and the reasons. Missing evidence for a relevant dimension is a coverage gap, not a reason to label it inapplicable. Apply the normal workflow and assurance rules to the selected criteria, then report results and coverage gaps. Do not equate "everything" with running every available test or claiming exhaustive verification.
 
 ## Architecture and design assessment
 

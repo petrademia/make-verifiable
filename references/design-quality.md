@@ -1,6 +1,6 @@
 # Architecture and design quality
 
-Use for explicitly requested repository or service coherence assessments. These dimensions guide investigation; they are not mandatory violations to find or a prescription for one architecture.
+Use for requested repository or service coherence assessments and for screening relevant dimensions during broad verification requests. Keep screening scoped to the target established from context. These dimensions guide investigation; they are not mandatory violations to find or a prescription for one architecture.
 
 ## Establish the assessment boundary
 

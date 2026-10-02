@@ -143,6 +143,8 @@ git clone https://github.com/petrademia/make-verifiable.git ~/.codex/skills/make
 
 Provide the task and its constraints. Contract resolution and verification are built into the skill; prompts do not need to repeat the workflow.
 
+For "verify everything," the skill states the target inferred from context and screens behavioral expectations and design-quality dimensions within that scope. It explains selected criteria and exclusions before choosing checks, then reports results and coverage gaps. This includes relevant coherence checks without requiring those words in the prompt; it does not trigger a full audit of every dimension or authorize edits during an assessment.
+
 ```text
 $make-verifiable Review this change against the ticket. Define the material criteria, run independent checks where warranted, and report only the claims supported by evidence.
 ```
